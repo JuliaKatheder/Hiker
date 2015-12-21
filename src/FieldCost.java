@@ -1,3 +1,4 @@
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,5 +29,10 @@ public class FieldCost {
 	
 	public void setCost(FieldType type, int value) {
 		this.costs.put(type, value);
+	}
+	
+	public int getMinValue() {
+		//System.out.println(this.costs.values());
+		return Collections.min(this.costs.values());
 	}
 }

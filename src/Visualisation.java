@@ -1,9 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
-public class Visualisation extends JFrame{
+public class Visualisation extends JFrame implements MouseListener{
 	
 	public enum Colors {
 		LIGHTGREEN(82,255,111),
@@ -27,6 +29,7 @@ public class Visualisation extends JFrame{
 	}
 	
 	TreasureMap map;
+	PathFinding path;
 	int unit;
 	int length;
 	
@@ -39,6 +42,7 @@ public class Visualisation extends JFrame{
 		this.setResizable(false);
 		this.setSize(this.length, this.length+20);
 		this.setVisible(true);
+		this.addMouseListener(this);
 	}
 	
 	public void paint(Graphics g) {
@@ -63,6 +67,48 @@ public class Visualisation extends JFrame{
 			}
 		}
 		
+		g.setColor(Color.RED);
+		g.fillOval(originX + map.getHiker().getPositionX()*this.unit, originY + map.getHiker().getPositionY()*this.unit, this.unit, this.unit);
+		g.fillRect(originX + map.getHiker().getDestinationX()*this.unit, originY + map.getHiker().getDestinationY()*this.unit, this.unit, this.unit);
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+		int positionX = e.getX()/this.unit;
+		int positionY = (e.getY()-20)/this.unit;
+		
+		System.out.println(positionX);
+		System.out.println(positionY);
+		map.getHiker().setDestinationX(positionX);
+		map.getHiker().setDestinationY(positionY);
+		repaint();
+		
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
 		
 	}
 }

@@ -22,7 +22,7 @@ public class MapGeneration {
 
 	private static void generateTrails(FieldType[][] map) {
 		Random r = new Random();
-		int trailCount = 5;
+		int trailCount = 4;
 		for(int i=0; i< trailCount; i++){
 		
 			int positionX = r.nextInt(map.length);
@@ -30,8 +30,6 @@ public class MapGeneration {
 			
 			int endX = r.nextInt(map.length);
 			int endY = r.nextInt(map.length);
-			
-	
 			
 			do{
 				map[positionX][positionY] = FieldType.TRAIL;
@@ -48,7 +46,6 @@ public class MapGeneration {
 					else
 						positionY++;
 				}
-				
 			}while(positionX!=endX && positionY!=endY);
 		}
 		
@@ -71,6 +68,35 @@ public class MapGeneration {
 	}
 
 	private static void generateRivers(FieldType[][] map) {
-
+		Random r = new Random();
+		int trailCount = 5;
+		for(int i=0; i< trailCount; i++){
+		
+			int positionX = r.nextInt(map.length);
+			int positionY = r.nextInt(map.length);
+			
+			int endX = r.nextInt(map.length);
+			int endY = r.nextInt(map.length);
+			
+			do{
+				if(map[positionX][positionY]==FieldType.TRAIL)
+					map[positionX][positionY] = FieldType.BRIDGE;
+				else
+					map[positionX][positionY] = FieldType.WATER;
+				double d = Math.random();
+				
+				if(d>0.5){
+					if(positionX > endX)
+						positionX--;
+					else
+						positionX++;
+				} else {
+					if(positionY > endY)
+						positionY--;
+					else
+						positionY++;
+				}
+			}while(positionX!=endX && positionY!=endY);
+		}
 	}
 }
