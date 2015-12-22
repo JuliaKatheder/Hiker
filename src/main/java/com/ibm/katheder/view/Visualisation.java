@@ -1,9 +1,13 @@
+package com.ibm.katheder.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
+
+import com.ibm.katheder.map.HikingMap;
+import com.ibm.katheder.pathfinding.PathFinding;
 
 public class Visualisation extends JFrame implements MouseListener{
 	
@@ -28,12 +32,12 @@ public class Visualisation extends JFrame implements MouseListener{
 		}
 	}
 	
-	TreasureMap map;
+	HikingMap map;
 	PathFinding path;
 	int unit;
 	int length;
 	
-	public Visualisation(TreasureMap map){
+	public Visualisation(HikingMap map){
 		this.map = map;
 		this.unit = 30;
 		this.length = map.getSize()*unit;

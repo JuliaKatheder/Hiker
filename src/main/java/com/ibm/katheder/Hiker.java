@@ -1,22 +1,26 @@
+package com.ibm.katheder;
+
+
+
 
 public class Hiker {
-	private Node position;
-	private Node destination;
+	private MapPosition position;
+	private MapPosition destination;
 	private int climbingKitCount;
 	
 	public Hiker() {
-		this.position = new Node(0, 0);
-		this.destination = new Node(19, 19);
+		this.position = new MapPosition(0, 0);
+		this.destination = new MapPosition(19, 19);
 		this.climbingKitCount = 1;
 	}
 	
 	public Hiker(int positionX, int positionY, int destinationX, int destinationY, int climbingKitCount) {
-		this.position = new Node(positionX, positionY);
-		this.destination = new Node(destinationX, destinationY);
+		this.position = new MapPosition(positionX, positionY);
+		this.destination = new MapPosition(destinationX, destinationY);
 		this.climbingKitCount = climbingKitCount;
 	}
 	
-	public Node getPosition() {
+	public MapPosition getPosition() {
 		return this.position;
 	}
 
@@ -36,7 +40,7 @@ public class Hiker {
 		this.position.setLocation(this.position.getX(), positionY);
 	}
 	
-	public Node getDestination() {
+	public MapPosition getDestination() {
 		return this.destination;
 	}
 	

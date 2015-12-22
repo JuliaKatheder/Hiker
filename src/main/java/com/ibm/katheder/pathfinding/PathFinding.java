@@ -1,26 +1,30 @@
+package com.ibm.katheder.pathfinding;
+
 import java.util.ArrayList;
+
+import com.ibm.katheder.MapPosition;
+import com.ibm.katheder.map.HikingMap;
+import com.ibm.katheder.map.generation.TerrainTypes;
 
 public class PathFinding {
 	
-	private TreasureMap map;
-	private FieldCost costs;
-	private FieldType[][] nodes;
-	private Node destination;
-	private Node position;
-	private ArrayList<Node> open;
-	private ArrayList<Node> closed;
-	private ArrayList<Node> path;
+	private HikingMap map;
+	private TerrainTypes[][] nodes;
+	private MapPosition destination;
+	private MapPosition position;
+	private ArrayList<MapPosition> open;
+	private ArrayList<MapPosition> closed;
+	private ArrayList<MapPosition> path;
 	
-	public PathFinding(TreasureMap map) {
+	public PathFinding(HikingMap map) {
 		this.map = map;
-		this.costs = map.getCosts();
 		this.nodes = map.getMap();
 		this.destination = map.getHiker().getDestination();
 		this.position = map.getHiker().getPosition();
-		this.open = new ArrayList<Node>();
+		this.open = new ArrayList<MapPosition>();
 		this.open.add(this.position);
-		this.closed = new ArrayList<Node>();
-		this.path = new ArrayList<Node>();
+		this.closed = new ArrayList<MapPosition>();
+		this.path = new ArrayList<MapPosition>();
 		this.path.add(this.position);
 		
 	}
@@ -40,7 +44,7 @@ public class PathFinding {
 		
 		/* Minimum F */
 		int minimum = 0;
-		Node nextNode = new Node(0,0);
+		MapPosition nextNode = new MapPosition(0,0);
 
 		for(int i = 0; i < open.size(); i++) {
 			int h = estimateCosts(open.get(i));
@@ -69,19 +73,19 @@ public class PathFinding {
 	}
 	
 	
-	private void updateOpenList(Node n) {
+	private void updateOpenList(MapPosition n) {
 		calculateNeighbours(n);
 	}
 
-	private ArrayList<Node> calculateNeighbours(Node n) {
-		ArrayList<Node> neighbours = new ArrayList<Node>();
+	private ArrayList<MapPosition> calculateNeighbours(MapPosition n) {
+		ArrayList<MapPosition> neighbours = new ArrayList<MapPosition>();
 		
 		for(int i = -1; i < 2; i++) {
 			for(int j = -1; j < 2; j++) {
 				int x = n.getX()+i;
 				int y = n.getY()+j;
 				if((j!=i) && (j + i)!=0 && x >= 0 && y >= 0 && x < map.getSize() && y < map.getSize()){
-					Node m = new Node(x, y);
+					MapPosition m = new MapPosition(x, y);
 					neighbours.add(m);
 				}	
 			}
@@ -107,22 +111,22 @@ public class PathFinding {
 		
 	}*/
 	
-	private int optimalCosts(Node n) {
+	private int optimalCosts(MapPosition n) {
 		int optimum = 0;
 		for(int i = 0; i < path.size(); i++) {
-			Node node = path.get(i);
-			optimum = optimum + costs.getCost(map.getFieldType(node.getX(), node.getY()));
+			MapPosition node = path.get(i);
+			optimum = optimum + map.getFieldType(node.getX(), node.getY()).getCost();
 		}
 		return optimum;
 	}
 	
-	private int estimateCosts(Node n) {
+	private int estimateCosts(MapPosition n) {
 		int x = this.destination.getX() - n.getX();
 		int y = this.destination.getY() - n.getY();
 		
-		int estimation = (x + y) * this.costs.getMinValue();
+		int estimation = (x + y) * TerrainTypes.getMinCost();
 		
-		System.out.println("estimation: "+estimation+" x: "+x+" y: "+y+" minCosts: "+this.costs.getMinValue());
+		System.out.println("estimation: "+estimation+" x: "+x+" y: "+y+" minCosts: "+ TerrainTypes.getMinCost());
 		return estimation;	
 	}
 	

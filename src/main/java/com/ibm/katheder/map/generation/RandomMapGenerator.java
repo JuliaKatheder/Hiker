@@ -1,8 +1,13 @@
+package com.ibm.katheder.map.generation;
+
 import java.util.Random;
 
-public class MapGeneration {
+import com.ibm.katheder.map.GeoMap;
+import com.ibm.katheder.pathfinding.SimplexNoise;
+
+public class RandomMapGenerator implements MapGenerator {
 	
-	public static FieldType[][] generateMap(FieldType[][] map) {
+	public static TerrainTypes[][] generateMap(TerrainTypes[][] map) {
 		
 		generatePlains(map);
 		generateWoods(map);
@@ -13,14 +18,14 @@ public class MapGeneration {
 		return map;
 	}
 
-	private static void generatePlains(FieldType[][] map) {
+	private static void generatePlains(TerrainTypes[][] map) {
 		int size = map.length;
 		for(int i=0; i<size*size; i++) {
-			map[i/size][i%size] = FieldType.PLAIN;
+			map[i/size][i%size] = TerrainTypes.PLAIN;
 		}
 	}
 
-	private static void generateTrails(FieldType[][] map) {
+	private static void generateTrails(TerrainTypes[][] map) {
 		Random r = new Random();
 		int trailCount = 4;
 		for(int i=0; i< trailCount; i++){
@@ -32,7 +37,7 @@ public class MapGeneration {
 			int endY = r.nextInt(map.length);
 			
 			do{
-				map[positionX][positionY] = FieldType.TRAIL;
+				map[positionX][positionY] = TerrainTypes.TRAIL;
 				double d = Math.random();
 				
 				if(d>0.5){
@@ -51,23 +56,23 @@ public class MapGeneration {
 		
 	}
 
-	private static void generateWoods(FieldType[][] map) {
+	private static void generateWoods(TerrainTypes[][] map) {
 		int size = map.length;
 		for(int i=0; i<size*size; i++) {
 			if(SimplexNoise.noise(i/size, i%size)<0)
-				map[i/size][i%size] = FieldType.WOOD;
+				map[i/size][i%size] = TerrainTypes.WOOD;
 		}
 	}
 
-	private static void generateRocks(FieldType[][] map) {
+	private static void generateRocks(TerrainTypes[][] map) {
 		int size = map.length;
 		for(int i=0; i<size*size; i++) {
 			if(SimplexNoise.noise(i/size, i%size)<-0.4)
-				map[i/size][i%size] = FieldType.ROCK;
+				map[i/size][i%size] = TerrainTypes.ROCK;
 		}
 	}
 
-	private static void generateRivers(FieldType[][] map) {
+	private static void generateRivers(TerrainTypes[][] map) {
 		Random r = new Random();
 		int trailCount = 5;
 		for(int i=0; i< trailCount; i++){
@@ -79,10 +84,10 @@ public class MapGeneration {
 			int endY = r.nextInt(map.length);
 			
 			do{
-				if(map[positionX][positionY]==FieldType.TRAIL)
-					map[positionX][positionY] = FieldType.BRIDGE;
+				if(map[positionX][positionY]==TerrainTypes.TRAIL)
+					map[positionX][positionY] = TerrainTypes.BRIDGE;
 				else
-					map[positionX][positionY] = FieldType.WATER;
+					map[positionX][positionY] = TerrainTypes.WATER;
 				double d = Math.random();
 				
 				if(d>0.5){
@@ -98,5 +103,11 @@ public class MapGeneration {
 				}
 			}while(positionX!=endX && positionY!=endY);
 		}
+	}
+
+	@Override
+	public GeoMap generateMap() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
