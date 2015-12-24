@@ -1,118 +1,90 @@
 package com.ibm.katheder.view;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 
-import com.ibm.katheder.map.HikingMap;
-import com.ibm.katheder.pathfinding.PathFinding;
+import com.ibm.katheder.map.Hiker;
+import com.ibm.katheder.view.color.ColorScheme.ColorSchemes;
 
-public class Visualisation extends JFrame implements MouseListener{
+public class Visualisation extends JFrame {
 	
-	public enum Colors {
-		LIGHTGREEN(82,255,111),
-		DARKGREEN(14,133,42),
-		GRAY(53,66,66),
-		BLUE(95,191,247),
-		LIGHTBROWN(255,230,170),
-		DARKBROWN(158,142,106);
+	private static final long serialVersionUID = 751161800519505699L;
 
-		private Colors(final Integer red, final Integer green, final Integer blue) {
-		    this.red = red;
-		    this.green = green;
-		    this.blue = blue;
-		}
-
-		private final Integer red, green, blue;
-
-		public Color getColor() {
-		    return new Color(red, green, blue);
-		}
-	}
+	private final int unit = 30;
 	
-	HikingMap map;
-	PathFinding path;
-	int unit;
-	int length;
+	private int screenWidth;
 	
-	public Visualisation(HikingMap map){
-		this.map = map;
-		this.unit = 30;
-		this.length = map.getSize()*unit;
+	private MapVisulalization mapVisualization;
+	
+	public Visualisation(Hiker hiker){
+				
+		this.screenWidth = hiker.getGeoMap().getSize()*unit;
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		this.setSize(this.length, this.length+20);
-		this.setVisible(true);
-		this.addMouseListener(this);
+		this.setJMenuBar(createMenuBar());
+		
+		this.mapVisualization = new MapVisulalization(hiker);
+		this.add(mapVisualization);
+		
+		this.pack();
+		this.setSize(this.screenWidth, this.screenWidth+50);
 	}
-	
-	public void paint(Graphics g) {
-		int originX = 0;
-		int originY = 20;
 		
-		System.out.println("Painting the awesome map...");
-		
-		
-		for(int i=0; i<map.getSize();i++){
-			for(int j=0; j<map.getSize();j++){
-				switch(map.getFieldType(i,j)){
-				case PLAIN: g.setColor(Colors.LIGHTGREEN.getColor()); break;
-				case WOOD: g.setColor(Colors.DARKGREEN.getColor()); break;
-				case ROCK: g.setColor(Colors.GRAY.getColor()); break;
-				case WATER: g.setColor(Colors.BLUE.getColor()); break;
-				case TRAIL: g.setColor(Colors.LIGHTBROWN.getColor()); break;
-				case BRIDGE: g.setColor(Colors.DARKBROWN.getColor()); break;
-				}
-				g.fillRect(originX + this.unit*i, originY + this.unit*j, this.unit, this.unit);
-				
+	private JMenuBar createMenuBar() {
+		final JMenuBar menuBar = new JMenuBar();
+
+		// Add Options Tab
+		final JMenu options = new JMenu("Optionen");
+		options.setMnemonic(KeyEvent.VK_O);
+		options.getAccessibleContext().setAccessibleDescription("Option Menu.");
+		// Add Show/Hide Path Option
+		final JMenuItem menuItem = new JMenuItem("A text-only menu item",
+		                KeyEvent.VK_T);
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(
+		KeyEvent.VK_1, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("This option switches between the different visualization formats.");
+		// TODO Action
+		options.add(menuItem);
+		// Add visualization options
+		options.addSeparator();
+		final JMenu visualizationSubMenu = new JMenu("Visualization Options"); 
+		final ButtonGroup visualizationGroup = new ButtonGroup();
+		JMenuItem rbMenuItem = new JRadioButtonMenuItem("Landscape");
+		rbMenuItem.setSelected(true);
+		rbMenuItem.setMnemonic(KeyEvent.VK_R);
+		rbMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mapVisualization.setColorScheme(ColorSchemes.LANDSCAPE);				
 			}
-		}
+		});
+		visualizationGroup.add(rbMenuItem);
+		visualizationSubMenu.add(rbMenuItem);
+		rbMenuItem = new JRadioButtonMenuItem("RGB Scheme");
+		rbMenuItem.setMnemonic(KeyEvent.VK_O);
+		rbMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mapVisualization.setColorScheme(ColorSchemes.RGB);				
+			}
+		});
+		visualizationGroup.add(rbMenuItem);
+		visualizationSubMenu.add(rbMenuItem);
+		options.add(visualizationSubMenu);
 		
-		g.setColor(Color.RED);
-		g.fillOval(originX + map.getHiker().getPositionX()*this.unit, originY + map.getHiker().getPositionY()*this.unit, this.unit, this.unit);
-		g.fillRect(originX + map.getHiker().getDestinationX()*this.unit, originY + map.getHiker().getDestinationY()*this.unit, this.unit, this.unit);
+		menuBar.add(options);
 		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-		int positionX = e.getX()/this.unit;
-		int positionY = (e.getY()-20)/this.unit;
-		
-		System.out.println(positionX);
-		System.out.println(positionY);
-		map.getHiker().setDestinationX(positionX);
-		map.getHiker().setDestinationY(positionY);
-		repaint();
-		
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		return menuBar;
 	}
 }

@@ -3,6 +3,8 @@
  */
 package com.ibm.katheder.map;
 
+import java.util.Comparator;
+
 /**
  * @author Sterbling
  *
@@ -31,6 +33,19 @@ public class TerrainType {
 
 	public int getWeight() {
 		return weight;
+	}
+	
+	public static TerrainTypeWeightComparator getWeightComparator() {
+		return new TerrainTypeWeightComparator();
+	}
+	
+	private static class TerrainTypeWeightComparator implements Comparator<TerrainType>{
+
+		@Override
+		public int compare(TerrainType terrain1, TerrainType terrain2) {
+			return terrain1.getWeight() - terrain2.getWeight();
+		}
+		
 	}
 	
 }

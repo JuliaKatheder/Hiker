@@ -3,29 +3,54 @@ package com.ibm.katheder.map.generation;
 import java.util.Random;
 
 import com.ibm.katheder.map.GeoMap;
+import com.ibm.katheder.map.GeoMapBuilder;
 import com.ibm.katheder.pathfinding.SimplexNoise;
 
+// TODO Adapt to new structure
 public class RandomMapGenerator implements MapGenerator {
 	
-	public static TerrainTypes[][] generateMap(TerrainTypes[][] map) {
+	@Override
+	public GeoMap generateMap() {
+		TerrainTypes[][] map = new TerrainTypes[20][20];
+		fillMap(map);
 		
+		final GeoMapBuilder mapBuilder = new GeoMapBuilder();
+		
+		// "Parse" the map
+		for(int indY = 0; indY < map.length; indY++) {
+			for(int indX = 0; indX < map.length; indX++) {
+				final TerrainTypes type = map[indY][indX];
+				mapBuilder.addGridSquare(type.getMappingId());
+				
+			}
+			mapBuilder.newLine();
+		}
+		
+		int mappingIndx = 0;
+		for(TerrainTypes terrainType : TerrainTypes.values()) {			
+			mapBuilder.addNewTerrainType(mappingIndx++, terrainType.name(), terrainType.getCost());
+		}
+		
+		return mapBuilder.build();
+	}
+	
+	private TerrainTypes[][] fillMap(TerrainTypes[][] map) {
 		generatePlains(map);
 		generateWoods(map);
 		generateRocks(map);
 		generateTrails(map);
 		generateRivers(map);
-		
 		return map;
 	}
 
-	private static void generatePlains(TerrainTypes[][] map) {
+	private void generatePlains(TerrainTypes[][] map) {
 		int size = map.length;
 		for(int i=0; i<size*size; i++) {
 			map[i/size][i%size] = TerrainTypes.PLAIN;
 		}
 	}
 
-	private static void generateTrails(TerrainTypes[][] map) {
+	private void generateTrails(TerrainTypes[][] map) {
 		Random r = new Random();
 		int trailCount = 4;
 		for(int i=0; i< trailCount; i++){
@@ -56,7 +81,7 @@ public class RandomMapGenerator implements MapGenerator {
 		
 	}
 
-	private static void generateWoods(TerrainTypes[][] map) {
+	private void generateWoods(TerrainTypes[][] map) {
 		int size = map.length;
 		for(int i=0; i<size*size; i++) {
 			if(SimplexNoise.noise(i/size, i%size)<0)
@@ -64,7 +89,7 @@ public class RandomMapGenerator implements MapGenerator {
 		}
 	}
 
-	private static void generateRocks(TerrainTypes[][] map) {
+	private void generateRocks(TerrainTypes[][] map) {
 		int size = map.length;
 		for(int i=0; i<size*size; i++) {
 			if(SimplexNoise.noise(i/size, i%size)<-0.4)
@@ -72,7 +97,7 @@ public class RandomMapGenerator implements MapGenerator {
 		}
 	}
 
-	private static void generateRivers(TerrainTypes[][] map) {
+	private void generateRivers(TerrainTypes[][] map) {
 		Random r = new Random();
 		int trailCount = 5;
 		for(int i=0; i< trailCount; i++){
@@ -84,7 +109,7 @@ public class RandomMapGenerator implements MapGenerator {
 			int endY = r.nextInt(map.length);
 			
 			do{
-				if(map[positionX][positionY]==TerrainTypes.TRAIL)
+				if(map[positionX][positionY] == TerrainTypes.TRAIL)
 					map[positionX][positionY] = TerrainTypes.BRIDGE;
 				else
 					map[positionX][positionY] = TerrainTypes.WATER;
@@ -105,9 +130,4 @@ public class RandomMapGenerator implements MapGenerator {
 		}
 	}
 
-	@Override
-	public GeoMap generateMap() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

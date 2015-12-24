@@ -1,4 +1,4 @@
-package com.ibm.katheder;
+package com.ibm.katheder.map;
 
 public class MapPosition {
 

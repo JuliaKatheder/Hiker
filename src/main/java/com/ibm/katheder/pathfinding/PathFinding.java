@@ -2,8 +2,8 @@ package com.ibm.katheder.pathfinding;
 
 import java.util.ArrayList;
 
-import com.ibm.katheder.MapPosition;
 import com.ibm.katheder.map.HikingMap;
+import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.generation.TerrainTypes;
 
 public class PathFinding {

@@ -1,15 +1,21 @@
 package com.ibm.katheder;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+import javax.swing.JMenuBar;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
 import com.ibm.katheder.map.GeoMap;
+import com.ibm.katheder.map.Hiker;
+import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.generation.MapGenerator;
 import com.ibm.katheder.map.generation.MapGeneratorFactory;
+import com.ibm.katheder.view.Visualisation;
 
 /**
  * Main class. Starts the visualization and routing logic.
@@ -32,7 +38,7 @@ public final class Main { // NOPMD
 
 		CommandLineArguments arguments = new CommandLineArguments();
 
-		new JCommander(arguments);
+		new JCommander(arguments, args);
 
 		try {
 			// Set the map generator
@@ -40,6 +46,19 @@ public final class Main { // NOPMD
 					.getMapGenerator(arguments.randomGenerator, arguments.mapfile);
 			final GeoMap geoMap = mapGenerator.generateMap();
 			// TODO Hiker & Map things
+			final MapPosition startPoint = new MapPosition(2, 14);
+			final MapPosition endPoint = new MapPosition(9, 1);
+			final Hiker hiker = new Hiker(geoMap, startPoint, endPoint);
+			
+			
+			EventQueue.invokeLater(new Runnable() {
+	            @Override
+	            public void run() {
+	    			final Visualisation mapVisualisation = new Visualisation(hiker);
+	    			mapVisualisation.setVisible(true);
+	            }
+	        });
+
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

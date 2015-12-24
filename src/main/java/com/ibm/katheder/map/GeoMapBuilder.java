@@ -40,6 +40,9 @@ public class GeoMapBuilder {
 	}
 
 	public void addNewTerrainType(int index, String name, int weight) {
+		if(weight < 0) {
+			weight = Integer.MAX_VALUE;
+		}
 		terrainTypes.put(index, new TerrainType(index, name, weight));
 		
 	}
