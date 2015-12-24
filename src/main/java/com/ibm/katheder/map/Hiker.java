@@ -30,6 +30,10 @@ public class Hiker {
 		return geoMap;
 	}
 	
+	public void setGeoMap(GeoMap geoMap) {
+		this.geoMap = geoMap;
+	}
+	
 	public MapPosition getPosition() {
 		return this.position;
 	}

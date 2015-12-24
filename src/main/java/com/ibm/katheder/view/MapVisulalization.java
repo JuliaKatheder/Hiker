@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import javax.swing.JComponent;
 
+import com.ibm.katheder.map.GeoMap;
 import com.ibm.katheder.map.Hiker;
 import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.view.color.ColorScheme;
@@ -118,6 +119,11 @@ public class MapVisulalization extends JComponent implements MouseListener{
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setNewMap(GeoMap generateMap) {
+		hiker.setGeoMap(generateMap);
+		repaint();
 	}
 	
 }

@@ -12,6 +12,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
 import com.ibm.katheder.map.Hiker;
+import com.ibm.katheder.map.generation.RandomMapGenerator;
 import com.ibm.katheder.view.color.ColorScheme.ColorSchemes;
 
 public class Visualisation extends JFrame {
@@ -47,12 +48,19 @@ public class Visualisation extends JFrame {
 		options.setMnemonic(KeyEvent.VK_O);
 		options.getAccessibleContext().setAccessibleDescription("Option Menu.");
 		// Add Show/Hide Path Option
-		final JMenuItem menuItem = new JMenuItem("A text-only menu item",
-		                KeyEvent.VK_T);
+		final JMenuItem menuItem = new JMenuItem("RANDOM!",
+		                KeyEvent.VK_R);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(
 		KeyEvent.VK_1, ActionEvent.ALT_MASK));
 		menuItem.getAccessibleContext().setAccessibleDescription("This option switches between the different visualization formats.");
-		// TODO Action
+		menuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RandomMapGenerator generator = new RandomMapGenerator();
+				mapVisualization.setNewMap(generator.generateMap());
+			}
+		}); 
 		options.add(menuItem);
 		// Add visualization options
 		options.addSeparator();
