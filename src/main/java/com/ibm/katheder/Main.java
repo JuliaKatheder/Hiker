@@ -3,7 +3,6 @@ package com.ibm.katheder;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -56,8 +55,6 @@ public final class Main { // NOPMD
 	            }
 	        });
 
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

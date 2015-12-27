@@ -5,12 +5,13 @@ package com.ibm.katheder.map.generation;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.List;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.ibm.katheder.utils.FileInputUtils;
 
@@ -22,7 +23,7 @@ public class MapGeneratorFactory {
 	
 	private static final Charset CHARSET = Charsets.ISO_8859_1;
 	
-	public static MapGenerator getMapGenerator(final boolean random, final File mapfile) throws IOException, URISyntaxException {
+	public static MapGenerator getMapGenerator(final boolean random, final File mapfile) throws IOException {
 		final MapGenerator mapGenerator;
 		if(random) {
 			mapGenerator = new RandomMapGenerator();
@@ -35,22 +36,18 @@ public class MapGeneratorFactory {
 				List<String> metaDataRaw = FileInputUtils.getMetaData(inputLines);
 				metaData = FileInputUtils.sanitizeMetaData(metaDataRaw);
 			} else {
-				mapData = Files.readLines(loadResource("map.csv"), CHARSET);
-				metaData = Files.readLines(loadResource("cost.csv"), CHARSET);
+				mapData = loadResource("map.csv");
+				metaData = loadResource("cost.csv");
 			}
 			mapGenerator = new CSVMapGenerator(mapData, metaData);
 		}
 		return mapGenerator;
 	}
 
-    private static File loadResource(final String resourceName) throws URISyntaxException {
-        File resourceFile = null;
-        // Setup the test file from source
+    private static List<String> loadResource(final String resourceName) throws IOException {
         final ClassLoader cl = ClassLoader.getSystemClassLoader();
-        final URL fileURL = cl.getResource(resourceName);
-
-        resourceFile = new File(fileURL.toURI());
-        return resourceFile;
+        final InputStream inputStream = cl.getResourceAsStream(resourceName);
+        return CharStreams.readLines(new InputStreamReader(inputStream, CHARSET));
     }
 	
 }

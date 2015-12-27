@@ -2,25 +2,26 @@ package com.ibm.katheder.pathfinding;
 
 import java.util.ArrayList;
 
-import com.ibm.katheder.map.HikingMap;
+import com.ibm.katheder.map.GeoMap;
+import com.ibm.katheder.map.Hiker;
 import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.generation.TerrainTypes;
 
 public class PathFinding {
 	
-	private HikingMap map;
-	private TerrainTypes[][] nodes;
+	private GeoMap map;
+	private int[][] nodes;
 	private MapPosition destination;
 	private MapPosition position;
 	private ArrayList<MapPosition> open;
 	private ArrayList<MapPosition> closed;
 	private ArrayList<MapPosition> path;
 	
-	public PathFinding(HikingMap map) {
-		this.map = map;
+	public PathFinding(Hiker hiker) {
+		this.map = hiker.getGeoMap();
 		this.nodes = map.getMap();
-		this.destination = map.getHiker().getDestination();
-		this.position = map.getHiker().getPosition();
+		this.destination = hiker.getDestination();
+		this.position = hiker.getPosition();
 		this.open = new ArrayList<MapPosition>();
 		this.open.add(this.position);
 		this.closed = new ArrayList<MapPosition>();
@@ -84,7 +85,7 @@ public class PathFinding {
 			for(int j = -1; j < 2; j++) {
 				int x = n.getX()+i;
 				int y = n.getY()+j;
-				if((j!=i) && (j + i)!=0 && x >= 0 && y >= 0 && x < map.getSize() && y < map.getSize()){
+				if((j!=i) && (j + i)!=0 && x >= 0 && y >= 0 && x < map.getHeight() && y < map.getWidth()){
 					MapPosition m = new MapPosition(x, y);
 					neighbours.add(m);
 				}	
@@ -115,7 +116,7 @@ public class PathFinding {
 		int optimum = 0;
 		for(int i = 0; i < path.size(); i++) {
 			MapPosition node = path.get(i);
-			optimum = optimum + map.getFieldType(node.getX(), node.getY()).getCost();
+			optimum = optimum + map.getFieldType(node.getX(), node.getY()).getWeight();
 		}
 		return optimum;
 	}
