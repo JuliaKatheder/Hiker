@@ -4,9 +4,8 @@ import java.util.Random;
 
 import com.ibm.katheder.map.GeoMap;
 import com.ibm.katheder.map.GeoMapBuilder;
-import com.ibm.katheder.pathfinding.SimplexNoise;
+import com.ibm.katheder.utils.SimplexNoise;
 
-// TODO Adapt to new structure
 public class RandomMapGenerator implements MapGenerator {
 	
 	@Override
@@ -41,6 +40,23 @@ public class RandomMapGenerator implements MapGenerator {
 		generateTrails(map);
 		generateRivers(map);
 		return map;
+	}
+	
+	private void generateWoods(TerrainTypes[][] map) {
+		int size = map.length;
+		for(int i=0; i<size*size; i++) {
+			if(SimplexNoise.noise(i/size, i%size) < 0)
+				map[i/size][i%size] = TerrainTypes.WOOD;
+		}
+	}
+	
+	private void generateRocks(TerrainTypes[][] map) {
+		int size = map.length;
+		for(int i=0; i<size*size; i++) {
+			
+			if(SimplexNoise.noise(i/size, i%size) < -0.4)
+				map[i/size][i%size] = TerrainTypes.ROCK;
+		}
 	}
 
 	private void generatePlains(TerrainTypes[][] map) {
@@ -81,32 +97,16 @@ public class RandomMapGenerator implements MapGenerator {
 		
 	}
 
-	private void generateWoods(TerrainTypes[][] map) {
-		int size = map.length;
-		for(int i=0; i<size*size; i++) {
-			if(SimplexNoise.noise(i/size, i%size)<0)
-				map[i/size][i%size] = TerrainTypes.WOOD;
-		}
-	}
-
-	private void generateRocks(TerrainTypes[][] map) {
-		int size = map.length;
-		for(int i=0; i<size*size; i++) {
-			if(SimplexNoise.noise(i/size, i%size)<-0.4)
-				map[i/size][i%size] = TerrainTypes.ROCK;
-		}
-	}
-
 	private void generateRivers(TerrainTypes[][] map) {
 		Random r = new Random();
 		int trailCount = 5;
 		for(int i=0; i< trailCount; i++){
 		
-			int positionX = r.nextInt(map.length);
-			int positionY = r.nextInt(map.length);
+			int positionX = r.nextInt(map.length-1);
+			int positionY = r.nextInt(map.length-1);
 			
-			int endX = r.nextInt(map.length);
-			int endY = r.nextInt(map.length);
+			int endX = r.nextInt(map.length-1);
+			int endY = r.nextInt(map.length-1);
 			
 			do{
 				if(map[positionX][positionY] == TerrainTypes.TRAIL)

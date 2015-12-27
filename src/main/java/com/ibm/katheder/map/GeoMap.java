@@ -6,7 +6,9 @@ public interface GeoMap {
 
 	int[][] getMap();
 	
-	int getSize();
+	int getHeight();
+	
+	int getWidth();
 	
 	int getCost(int x, int y);
 	

@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import javax.swing.JMenuBar;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
@@ -36,7 +34,7 @@ public final class Main { // NOPMD
 	 */
 	public static void main(final String[] args) { // NOPMD
 
-		CommandLineArguments arguments = new CommandLineArguments();
+		final CommandLineArguments arguments = new CommandLineArguments();
 
 		new JCommander(arguments, args);
 
@@ -45,12 +43,11 @@ public final class Main { // NOPMD
 			final MapGenerator mapGenerator = MapGeneratorFactory
 					.getMapGenerator(arguments.randomGenerator, arguments.mapfile);
 			final GeoMap geoMap = mapGenerator.generateMap();
-			// TODO Hiker & Map things
 			final MapPosition startPoint = new MapPosition(2, 14);
 			final MapPosition endPoint = new MapPosition(9, 1);
 			final Hiker hiker = new Hiker(geoMap, startPoint, endPoint);
-			
-			
+			// TODO Pathfinding
+
 			EventQueue.invokeLater(new Runnable() {
 	            @Override
 	            public void run() {
@@ -64,14 +61,6 @@ public final class Main { // NOPMD
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		// final HikingMap map = new HikingMap(20);
-		// RandomMapGenerator.generateMap(map.getMap());
-
-		// Visualisation vis = new Visualisation(map);
-
-		// final PathFinding pathFinding = new PathFinding(map);
-		// pathFinding.findPath();
 
 	}
 

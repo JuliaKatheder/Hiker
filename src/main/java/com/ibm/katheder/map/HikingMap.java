@@ -25,8 +25,12 @@ public class HikingMap implements GeoMap {
 		return map;
 	}
 	
-	public int getSize(){
+	public int getHeight(){
 		return this.map.length;
+	}
+	
+	public int getWidth() {
+		return this.map[0].length;
 	}
 	
 	public int getCost(int x, int y) {

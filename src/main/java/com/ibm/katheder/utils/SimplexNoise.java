@@ -1,4 +1,4 @@
-package com.ibm.katheder.pathfinding;
+package com.ibm.katheder.utils;
 /*
  * A speed-improved simplex noise algorithm for 2D, 3D and 4D in Java.
  *

@@ -62,15 +62,15 @@ public class Hiker {
 		}
 	}
 	
-	public int getPositionX() {
+	public int getPosX() {
 		return (int)position.getX();
 	}
 
-	public int getPositionY() {
+	public int getPosY() {
 		return (int)position.getY();
 	}
 	
-	public int getDestinationX() {
+	public int getDestX() {
 		return (int)destination.getX();
 	}
 
@@ -78,7 +78,7 @@ public class Hiker {
 		this.destination.setLocation(positionX, this.destination.getY());
 	}
 
-	public int getDestinationY() {
+	public int getDestY() {
 		return (int)destination.getY();
 	}
 
