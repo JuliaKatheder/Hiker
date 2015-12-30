@@ -18,12 +18,14 @@ import com.ibm.katheder.view.Visualisation;
 /**
  * Main class. Starts the visualization and routing logic.
  * 
+ * TODO: In general proper error handling.
+ * 
  * @author Julia Katheder
  *
  */
 public final class Main {
 
-	/** Main class shouldn't be instanziated.*/
+	/** Main class shouldn't be instanciated.*/
 	private Main() {
 	};
 
@@ -44,6 +46,7 @@ public final class Main {
 			final MapGenerator mapGenerator = MapGeneratorFactory
 					.getMapGenerator(arguments.randomGenerator, arguments.mapfile);
 			final GeoMap geoMap = mapGenerator.generateMap();
+			// Add the Hiker and his destination on the map
 			final MapPosition startPoint = arguments.startPosition;
 			final MapPosition endPoint = arguments.endPosition;
 			final Hiker hiker = new Hiker(geoMap, startPoint, endPoint);

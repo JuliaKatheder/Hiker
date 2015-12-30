@@ -10,23 +10,23 @@ import com.ibm.katheder.map.generation.RandomMapGenerator;
 import com.ibm.katheder.view.MapVisulalization;
 
 /**
- * Action to generate a new random map.
+ * <p>Action to generate a new random map.</p>
  * 
  * @author Sterbling
+ * @version 1.0
  *
  */
 public class RandomMapAction implements ActionListener{
 
+	private final MapVisulalization mapVisualization;
 	
-	private MapVisulalization mapVisualization;
-	
-	public RandomMapAction(MapVisulalization mapVisualization) {
+	public RandomMapAction(final MapVisulalization mapVisualization) {
 		this.mapVisualization = mapVisualization;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		RandomMapGenerator generator = new RandomMapGenerator();
+	public void actionPerformed(final ActionEvent e) {
+		final RandomMapGenerator generator = new RandomMapGenerator();
 		mapVisualization.setNewMap(generator.generateMap());
 	}
 }
