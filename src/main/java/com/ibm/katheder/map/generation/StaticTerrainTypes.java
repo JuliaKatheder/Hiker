@@ -15,21 +15,21 @@ import java.util.Comparator;
 4;Brücke;3
 5;Felswand;8
  * 
- * @author Sterbling
+ * @author Sventoni
  *
  */
-public enum TerrainTypes {
+public enum StaticTerrainTypes {
 	TRAIL(2, 1), BRIDGE(4, 3), PLAIN(0, 3), WOOD(3, 4), ROCK(5, 8), WATER(1, Integer.MAX_VALUE);
 	
 	/** Enum with the lowest costs. */
-	private final static TerrainTypes MINCOSTTYPE = Collections.min(Arrays.asList(TerrainTypes.values()), new TerrainTypeComparator());
+	private final static StaticTerrainTypes MINCOSTTYPE = Collections.min(Arrays.asList(StaticTerrainTypes.values()), new TerrainTypeComparator());
 
 	private final int mappingId;
 
 	/** The weigt of traveling through the terrain. */
 	private final int cost;
 
-	private TerrainTypes(final int mappingId, final int cost) {
+	private StaticTerrainTypes(final int mappingId, final int cost) {
 		this.mappingId = mappingId;
 		this.cost = cost;
 	}
@@ -63,17 +63,17 @@ public enum TerrainTypes {
 	/**
 	 * Comparator used to compare for lowest cost.
 	 * 
-	 * @author Sterbling
+	 * @author Sventoni
 	 *
 	 */
-	private static class TerrainTypeComparator implements Comparator<TerrainTypes> {
+	private static class TerrainTypeComparator implements Comparator<StaticTerrainTypes> {
 
 		/*
 		 * (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
 		@Override
-		public int compare(final TerrainTypes type1,final  TerrainTypes type2) { // NOPMD
+		public int compare(final StaticTerrainTypes type1,final  StaticTerrainTypes type2) { // NOPMD
 			return type1.getCost() - type2.cost;
 		}
 		

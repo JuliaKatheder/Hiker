@@ -5,11 +5,13 @@ package com.ibm.katheder.view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -27,6 +30,7 @@ import com.ibm.katheder.map.GeoMap;
 import com.ibm.katheder.map.Hiker;
 import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.generation.RandomMapGenerator;
+import com.ibm.katheder.pathfinding.PathFinding;
 import com.ibm.katheder.view.action.ChangeColorSchemeAction;
 import com.ibm.katheder.view.action.RandomMapAction;
 import com.ibm.katheder.view.color.ColorScheme;
@@ -47,16 +51,16 @@ import com.ibm.katheder.view.color.RGBDynamicColorScheme;
  * {@link LandscapeStaticColorScheme}).
  * </p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  */
 public class MapVisulalization extends JComponent implements MouseListener {
 
 	private static final long serialVersionUID = 751161800519505699L;
 
-	/** Time between clicks for a doubleclick in ms.*/
+	/** Time between clicks for a doubleclick in ms. */
 	private static final int TIME_DOUBLECLICK = 250;
-	
+
 	/** Size of an element in the canvas in pixels. */
 	private static final int unit = 30;
 
@@ -103,7 +107,7 @@ public class MapVisulalization extends JComponent implements MouseListener {
 				final int mappingId = hiker.getGeoMap()
 						.getFieldType(rowIndx, colIndx).getMappingId();
 				g.setColor(colorScheme.getColorFor(mappingId));
-				g.fillRect(unit * rowIndx, unit * colIndx, unit, unit);
+				g.fillRect(unit * colIndx, unit * rowIndx, unit, unit);
 
 			}
 		}
@@ -112,8 +116,13 @@ public class MapVisulalization extends JComponent implements MouseListener {
 		g.fillOval(hiker.getPosX() * unit, hiker.getPosY() * unit, unit, unit);
 		g.fillRect(hiker.getDestX() * unit, hiker.getDestY() * unit, unit, unit);
 
-		// TODO add the path to the visualization
-
+		final List<MapPosition> route = hiker.findPath(new PathFinding());
+		
+		for(MapPosition pathPoint : route) {
+			System.out.println(pathPoint.toString());
+			g.fillRect(pathPoint.getX() * unit + unit/4, pathPoint.getY() * unit + unit/4, unit/2, unit/2);
+		}
+		
 	}
 
 	public void setColorScheme(ColorSchemes landscape) {
@@ -152,9 +161,14 @@ public class MapVisulalization extends JComponent implements MouseListener {
 		final int positionY = e.getY() / unit;
 		// TODO some validation logic to prevent placing hiker or dest on
 		// unreachable terrain.
+		if(hiker.getGeoMap().getFieldType(positionY, positionX).getWeight() == Integer.MAX_VALUE) {
+			JOptionPane.showMessageDialog(this, "blubb blubb no no!", "Warning: You are about to drown!", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
 		if (isAlreadyOneClick) {
 			isAlreadyOneClick = false;
-			hiker.setPosition(new MapPosition(positionX, positionY));
+			hiker.setPosition(new MapPosition(positionY, positionX));
 			repaint();
 		} else {
 			isAlreadyOneClick = true;
@@ -162,8 +176,8 @@ public class MapVisulalization extends JComponent implements MouseListener {
 				@Override
 				public void run() {
 					if (isAlreadyOneClick) {
-						hiker.setDestination(new MapPosition(positionX,
-								positionY));
+						hiker.setDestination(new MapPosition(positionY,
+								positionX));
 						vis.repaint();
 					}
 					isAlreadyOneClick = false;

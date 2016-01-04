@@ -16,7 +16,7 @@ import com.google.common.io.Files;
 import com.ibm.katheder.utils.FileInputUtils;
 
 /**
- * @author Sterbling
+ * @author Sventoni
  *
  */
 public class MapGeneratorFactory {

@@ -12,7 +12,7 @@ import com.beust.jcommander.IStringConverter;
  * {@code x-coord,y-coord} into a {@link MapPosition}.
  * </p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  *
  */

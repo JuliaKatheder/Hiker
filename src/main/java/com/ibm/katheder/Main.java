@@ -3,6 +3,7 @@ package com.ibm.katheder;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -13,6 +14,7 @@ import com.ibm.katheder.map.Hiker;
 import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.generation.MapGenerator;
 import com.ibm.katheder.map.generation.MapGeneratorFactory;
+import com.ibm.katheder.pathfinding.PathFinding;
 import com.ibm.katheder.view.Visualisation;
 
 /**
@@ -50,7 +52,6 @@ public final class Main {
 			final MapPosition startPoint = arguments.startPosition;
 			final MapPosition endPoint = arguments.endPosition;
 			final Hiker hiker = new Hiker(geoMap, startPoint, endPoint);
-			// TODO Pathfinding
 
 			EventQueue.invokeLater(new Runnable() {
 	            @Override
@@ -77,7 +78,7 @@ public final class Main {
 	 * </ul>
 	 * </p>
 	 * 
-	 * @author Sterbling
+	 * @author Sventoni
 	 * @version 1.0
 	 */
 	private static class CommandLineArguments {
@@ -91,13 +92,13 @@ public final class Main {
 		public boolean randomGenerator = false;
 		
 		@Parameter(names = { "-start", "-s" }, converter = GeoPositionConverter.class,
-				description = "StartPosition for hiker. Default: 2,14")
-		public MapPosition startPosition =  new MapPosition(2, 14);
+				description = "StartPosition for hiker. Default: 14(y),2(x)")
+		public MapPosition startPosition =  new MapPosition(14, 2);
 		
 
 		@Parameter(names = { "-end", "-e" }, converter = GeoPositionConverter.class,
-				description = "Destination for hiker. Default: 9,1")
-		public MapPosition endPosition = new MapPosition(9, 1);
+				description = "Destination for hiker. Default: 1(y),9(x)")
+		public MapPosition endPosition = new MapPosition(1, 9);
 
 	}
 

@@ -11,7 +11,7 @@ import com.ibm.katheder.view.MapVisulalization;
 /**
  * <p>Interface for all classes providing a color scheme for the {@link MapVisulalization}.</p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  *
  */
@@ -20,7 +20,7 @@ public interface ColorScheme {
 	/**
 	 * Current defined ColorSchemes.
 	 * 
-	 * @author Sterbling
+	 * @author Sventoni
 	 *
 	 */
 	public static enum ColorSchemes {

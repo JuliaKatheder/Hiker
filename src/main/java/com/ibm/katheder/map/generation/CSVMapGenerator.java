@@ -10,7 +10,7 @@ import com.ibm.katheder.map.GeoMapBuilder;
 import com.ibm.katheder.utils.FileInputUtils;
 
 /**
- * @author Sterbling
+ * @author Sventoni
  *
  */
 public class CSVMapGenerator implements MapGenerator {

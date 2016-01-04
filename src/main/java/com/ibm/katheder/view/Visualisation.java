@@ -19,7 +19,7 @@ import com.ibm.katheder.map.Hiker;
  * {@link MapVisulalization}.
  * </p>
  * 
- * @author Sterbling
+ * @author Sventoni
  */
 public class Visualisation extends JFrame {
 

@@ -7,7 +7,7 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ibm.katheder.map.generation.TerrainTypes;
+import com.ibm.katheder.map.generation.StaticTerrainTypes;
 
 /**
  * <p>
@@ -15,7 +15,7 @@ import com.ibm.katheder.map.generation.TerrainTypes;
  * TerrainTypes are matched by their Id in the {@link Colors} enum.
  * </p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  */
 public class LandscapeStaticColorScheme implements ColorScheme {
@@ -41,17 +41,17 @@ public class LandscapeStaticColorScheme implements ColorScheme {
 
 	private enum Colors {
 		/** Plain. */
-		LIGHTGREEN(TerrainTypes.PLAIN.getMappingId(), 82, 255, 111),
+		LIGHTGREEN(StaticTerrainTypes.PLAIN.getMappingId(), 82, 255, 111),
 		/** River. */
-		BLUE(TerrainTypes.WATER.getMappingId(), 95, 191, 247),
+		BLUE(StaticTerrainTypes.WATER.getMappingId(), 95, 191, 247),
 		/** Trail. */
-		LIGHTBROWN(TerrainTypes.TRAIL.getMappingId(), 255, 230, 170),
+		LIGHTBROWN(StaticTerrainTypes.TRAIL.getMappingId(), 255, 230, 170),
 		/** Forest. */
-		DARKGREEN(TerrainTypes.WOOD.getMappingId(), 14, 133, 42),
+		DARKGREEN(StaticTerrainTypes.WOOD.getMappingId(), 14, 133, 42),
 		/** Bridge. */
-		DARKBROWN(TerrainTypes.BRIDGE.getMappingId(), 158, 142, 106),
+		DARKBROWN(StaticTerrainTypes.BRIDGE.getMappingId(), 158, 142, 106),
 		/** Mountain */
-		GRAY(TerrainTypes.ROCK.getMappingId(), 53, 66, 66);
+		GRAY(StaticTerrainTypes.ROCK.getMappingId(), 53, 66, 66);
 
 		private Colors(final int terrainId, final Integer red,
 				final Integer green, final Integer blue) {

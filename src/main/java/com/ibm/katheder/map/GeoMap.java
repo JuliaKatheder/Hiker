@@ -10,9 +10,9 @@ public interface GeoMap {
 	
 	int getWidth();
 	
-	int getCost(int x, int y);
+	int getCost(int y, int x);
 	
-	TerrainType getFieldType(int x, int y);
+	TerrainType getFieldType(int y, int x);
 
 	Map<Integer, TerrainType> getTerrainTypes();
 	

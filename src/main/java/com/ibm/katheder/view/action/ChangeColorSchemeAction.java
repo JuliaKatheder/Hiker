@@ -12,7 +12,7 @@ import com.ibm.katheder.view.color.ColorScheme.ColorSchemes;
 /**
  * <p>Action to switch the color scheme.</p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  *
  */

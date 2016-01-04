@@ -6,7 +6,7 @@ package com.ibm.katheder.map;
 import java.util.Comparator;
 
 /**
- * @author Sterbling
+ * @author Sventoni
  *
  */
 public class TerrainType {

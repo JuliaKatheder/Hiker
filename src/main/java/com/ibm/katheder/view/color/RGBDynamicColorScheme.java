@@ -22,7 +22,7 @@ import com.ibm.katheder.map.TerrainType;
  * {@link TerrainType} which are indicated by the value of Integer.MAX_VALUE.
  * </p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  *
  */

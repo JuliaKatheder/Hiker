@@ -12,7 +12,7 @@ import com.ibm.katheder.view.MapVisulalization;
 /**
  * <p>Action to generate a new random map.</p>
  * 
- * @author Sterbling
+ * @author Sventoni
  * @version 1.0
  *
  */

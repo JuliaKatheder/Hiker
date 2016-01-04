@@ -15,7 +15,7 @@ import com.sun.org.apache.bcel.internal.classfile.Code;
  * terraintypes.
  * </p>
  * 
- * @author Sterbling
+ * @author Sventoni
  *
  */
 public class FileInputUtils {

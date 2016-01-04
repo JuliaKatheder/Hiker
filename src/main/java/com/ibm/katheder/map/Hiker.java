@@ -1,5 +1,10 @@
 package com.ibm.katheder.map;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ibm.katheder.pathfinding.PathFinding;
+
 
 public class Hiker {
 	
@@ -23,7 +28,7 @@ public class Hiker {
 		this.geoMap = geoMap;
 		this.position = startPoint;
 		this.destination = destination;
-		this.climbingKitCount = 1; // Default amount
+		this.climbingKitCount = 2; // Default amount
 	}
 	
 	public GeoMap getGeoMap() {
@@ -86,4 +91,7 @@ public class Hiker {
 		this.destination.setLocation(this.destination.getX(), positionY);
 	}
 	
+	public List<MapPosition> findPath(PathFinding p) {
+		return p.findPath(this.geoMap, this.position, this.destination, this.climbingKitCount);
+	}
 }

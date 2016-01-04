@@ -8,7 +8,7 @@ import com.ibm.katheder.map.GeoMap;
 /**
  * Interface for creation of the map used for finding the shortest path.
  * 
- * @author Sterbling
+ * @author Sventoni
  *
  */
 public interface MapGenerator {
