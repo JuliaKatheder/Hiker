@@ -3,7 +3,6 @@ package com.ibm.katheder;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -51,7 +50,7 @@ public final class Main {
 			// Add the Hiker and his destination on the map
 			final MapPosition startPoint = arguments.startPosition;
 			final MapPosition endPoint = arguments.endPosition;
-			final Hiker hiker = new Hiker(geoMap, startPoint, endPoint);
+			final Hiker hiker = new Hiker(new PathFinding(), geoMap, startPoint, endPoint);
 
 			EventQueue.invokeLater(new Runnable() {
 	            @Override

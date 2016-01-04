@@ -6,10 +6,10 @@ package com.ibm.katheder.view.color;
 import java.awt.Color;
 
 import com.ibm.katheder.map.TerrainType;
-import com.ibm.katheder.view.MapVisulalization;
+import com.ibm.katheder.view.MapVisualization;
 
 /**
- * <p>Interface for all classes providing a color scheme for the {@link MapVisulalization}.</p>
+ * <p>Interface for all classes providing a color scheme for the {@link MapVisualization}.</p>
  * 
  * @author Sventoni
  * @version 1.0

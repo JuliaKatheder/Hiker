@@ -1,8 +1,8 @@
 package com.ibm.katheder.map;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.katheder.map.error.InvalidMapPositionException;
 import com.ibm.katheder.pathfinding.PathFinding;
 
 
@@ -15,20 +15,23 @@ public class Hiker {
 	
 	private int climbingKitCount;
 	
-	public Hiker(GeoMap geoMap) {
-		this(geoMap, new MapPosition(0, 0), new MapPosition(19, 19));
+	private PathFinding pathFinding;
+	
+	public Hiker(PathFinding pathFinding, GeoMap geoMap) {
+		this(pathFinding, geoMap, new MapPosition(0, 0), new MapPosition(19, 19));
 	}
 	
-	public Hiker(GeoMap geoMap, int posX, int posY, int destX, int destY, int climbingKitCount) {
-		this(geoMap, new MapPosition(posX, posY), new MapPosition(destX, destY));
+	public Hiker(PathFinding pathFinding, GeoMap geoMap, int posX, int posY, int destX, int destY, int climbingKitCount) {
+		this(pathFinding, geoMap, new MapPosition(posX, posY), new MapPosition(destX, destY));
 		this.climbingKitCount = climbingKitCount;
 	}
 	
-	public Hiker(GeoMap geoMap, MapPosition startPoint, MapPosition destination) {
+	public Hiker(PathFinding pathFinding, GeoMap geoMap, MapPosition startPoint, MapPosition destination) {
+		this.pathFinding = pathFinding;
 		this.geoMap = geoMap;
 		this.position = startPoint;
 		this.destination = destination;
-		this.climbingKitCount = 2; // Default amount
+		this.climbingKitCount = 1; // Default amount
 	}
 	
 	public GeoMap getGeoMap() {
@@ -43,7 +46,10 @@ public class Hiker {
 		return this.position;
 	}
 
-	public void setPosition(MapPosition position) {
+	public void setPosition(MapPosition position) throws InvalidMapPositionException {
+		if(getGeoMap().getFieldType(destination.getY(), destination.getX()).getWeight() == Integer.MAX_VALUE) {
+			throw new InvalidMapPositionException("Blubb blubb noo!");
+		}
 		this.position = position;
 	}
 	
@@ -51,22 +57,13 @@ public class Hiker {
 		return this.destination;
 	}
 
-	public void setDestination(MapPosition destination) {
+	public void setDestination(MapPosition destination) throws InvalidMapPositionException {
+		if(getGeoMap().getFieldType(destination.getY(), destination.getX()).getWeight() == Integer.MAX_VALUE) {
+			throw new InvalidMapPositionException("Blubb blubb noo!");
+		}
 		this.destination = destination;
 	}
-	
-	public boolean hasClimbingKit() {
-		return (climbingKitCount > 0) ? true : false;
-	}
-	
-	public void useClimbingKit() {
-		if(this.hasClimbingKit()) {			
-			climbingKitCount--;
-		} else {
-			// TODO throw an error ot sth
-		}
-	}
-	
+			
 	public int getPosX() {
 		return (int)position.getX();
 	}
@@ -79,19 +76,11 @@ public class Hiker {
 		return (int)destination.getX();
 	}
 
-	public void setDestinationX(int positionX) {
-		this.destination.setLocation(positionX, this.destination.getY());
-	}
-
 	public int getDestY() {
 		return (int)destination.getY();
 	}
-
-	public void setDestinationY(int positionY) {
-		this.destination.setLocation(this.destination.getX(), positionY);
-	}
 	
-	public List<MapPosition> findPath(PathFinding p) {
-		return p.findPath(this.geoMap, this.position, this.destination, this.climbingKitCount);
+	public List<MapPosition> findPath() {
+		return pathFinding.findPath(this.geoMap, this.position, this.destination, this.climbingKitCount);
 	}
 }

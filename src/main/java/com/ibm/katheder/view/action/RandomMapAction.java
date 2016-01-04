@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.ibm.katheder.map.generation.RandomMapGenerator;
-import com.ibm.katheder.view.MapVisulalization;
+import com.ibm.katheder.view.MapVisualization;
 
 /**
  * <p>Action to generate a new random map.</p>
@@ -18,9 +18,9 @@ import com.ibm.katheder.view.MapVisulalization;
  */
 public class RandomMapAction implements ActionListener{
 
-	private final MapVisulalization mapVisualization;
+	private final MapVisualization mapVisualization;
 	
-	public RandomMapAction(final MapVisulalization mapVisualization) {
+	public RandomMapAction(final MapVisualization mapVisualization) {
 		this.mapVisualization = mapVisualization;
 	}
 

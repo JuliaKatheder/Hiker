@@ -6,7 +6,7 @@ package com.ibm.katheder.view.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.ibm.katheder.view.MapVisulalization;
+import com.ibm.katheder.view.MapVisualization;
 import com.ibm.katheder.view.color.ColorScheme.ColorSchemes;
 
 /**
@@ -18,11 +18,11 @@ import com.ibm.katheder.view.color.ColorScheme.ColorSchemes;
  */
 public class ChangeColorSchemeAction implements ActionListener{
 
-	private final MapVisulalization mapVisualization;
+	private final MapVisualization mapVisualization;
 	
 	private final ColorSchemes colorScheme;
 	
-	public ChangeColorSchemeAction(final MapVisulalization mapVisualization, final ColorSchemes colorScheme) {
+	public ChangeColorSchemeAction(final MapVisualization mapVisualization, final ColorSchemes colorScheme) {
 		this.mapVisualization = mapVisualization;
 		this.colorScheme = colorScheme;
 	}

@@ -16,7 +16,7 @@ import com.ibm.katheder.map.Hiker;
  * <p>
  * Visualization root for the graphical user interface. Currently contains the
  * default layout consisting out of a {@link JMenuBar} and the
- * {@link MapVisulalization}.
+ * {@link MapVisualization}.
  * </p>
  * 
  * @author Sventoni
@@ -27,12 +27,12 @@ public class Visualisation extends JFrame {
 
 	private final JMenuBar menuBar;
 
-	private MapVisulalization mapVisualization;
+	private MapVisualization mapVisualization;
 
 	public Visualisation(Hiker hiker) {
 		this.menuBar = new JMenuBar();
 
-		this.mapVisualization = new MapVisulalization(menuBar, hiker);
+		this.mapVisualization = new MapVisualization(menuBar, hiker);
 		this.add(mapVisualization);
 		addMenuTab();
 		this.setJMenuBar(menuBar);

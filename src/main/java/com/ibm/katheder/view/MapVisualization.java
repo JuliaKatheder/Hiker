@@ -5,7 +5,6 @@ package com.ibm.katheder.view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -29,8 +28,9 @@ import javax.swing.SwingUtilities;
 import com.ibm.katheder.map.GeoMap;
 import com.ibm.katheder.map.Hiker;
 import com.ibm.katheder.map.MapPosition;
+import com.ibm.katheder.map.TerrainType;
+import com.ibm.katheder.map.error.InvalidMapPositionException;
 import com.ibm.katheder.map.generation.RandomMapGenerator;
-import com.ibm.katheder.pathfinding.PathFinding;
 import com.ibm.katheder.view.action.ChangeColorSchemeAction;
 import com.ibm.katheder.view.action.RandomMapAction;
 import com.ibm.katheder.view.color.ColorScheme;
@@ -54,7 +54,7 @@ import com.ibm.katheder.view.color.RGBDynamicColorScheme;
  * @author Sventoni
  * @version 1.0
  */
-public class MapVisulalization extends JComponent implements MouseListener {
+public class MapVisualization extends JComponent implements MouseListener {
 
 	private static final long serialVersionUID = 751161800519505699L;
 
@@ -87,7 +87,7 @@ public class MapVisulalization extends JComponent implements MouseListener {
 	 * @param hiker
 	 *            see {@link Hiker}. Represents the Model for this view.
 	 */
-	public MapVisulalization(JMenuBar menuBar, Hiker hiker) {
+	public MapVisualization(JMenuBar menuBar, Hiker hiker) {
 		super();
 		this.hiker = hiker;
 		this.colorScheme = new LandscapeStaticColorScheme();
@@ -116,7 +116,7 @@ public class MapVisulalization extends JComponent implements MouseListener {
 		g.fillOval(hiker.getPosX() * unit, hiker.getPosY() * unit, unit, unit);
 		g.fillRect(hiker.getDestX() * unit, hiker.getDestY() * unit, unit, unit);
 
-		final List<MapPosition> route = hiker.findPath(new PathFinding());
+		final List<MapPosition> route = hiker.findPath();
 		
 		for(MapPosition pathPoint : route) {
 			System.out.println(pathPoint.toString());
@@ -130,8 +130,9 @@ public class MapVisulalization extends JComponent implements MouseListener {
 		// TODO this could be in a builder or sth...
 		switch (landscape) {
 		case RGB:
-			newScheme = new RGBDynamicColorScheme(new LinkedList<>(hiker
-					.getGeoMap().getTerrainTypes().values()));
+			final List<TerrainType> terrainTypes = new LinkedList<>(hiker
+					.getGeoMap().getTerrainTypes().values());
+			newScheme = new RGBDynamicColorScheme(terrainTypes);
 			break;
 		default:
 			newScheme = new LandscapeStaticColorScheme();
@@ -156,28 +157,32 @@ public class MapVisulalization extends JComponent implements MouseListener {
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		final MapVisulalization vis = this;
+		final MapVisualization vis = this;
 		final int positionX = e.getX() / unit;
 		final int positionY = e.getY() / unit;
-		// TODO some validation logic to prevent placing hiker or dest on
-		// unreachable terrain.
-		if(hiker.getGeoMap().getFieldType(positionY, positionX).getWeight() == Integer.MAX_VALUE) {
-			JOptionPane.showMessageDialog(this, "blubb blubb no no!", "Warning: You are about to drown!", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
 		
 		if (isAlreadyOneClick) {
 			isAlreadyOneClick = false;
-			hiker.setPosition(new MapPosition(positionY, positionX));
-			repaint();
+			try {
+				hiker.setPosition(new MapPosition(positionY, positionX));
+				repaint();
+			} catch (InvalidMapPositionException e1) {
+				JOptionPane.showMessageDialog(this, e1.getMessage(), e1.getTitle(), JOptionPane.WARNING_MESSAGE);
+				e1.printStackTrace();
+			}
 		} else {
 			isAlreadyOneClick = true;
 			doubleClickTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					if (isAlreadyOneClick) {
-						hiker.setDestination(new MapPosition(positionY,
-								positionX));
+						try {
+							hiker.setDestination(new MapPosition(positionY,
+									positionX));
+						} catch (InvalidMapPositionException e) {
+							JOptionPane.showMessageDialog(vis, e.getMessage(), e.getTitle(), JOptionPane.WARNING_MESSAGE);
+							e.printStackTrace();
+						}
 						vis.repaint();
 					}
 					isAlreadyOneClick = false;

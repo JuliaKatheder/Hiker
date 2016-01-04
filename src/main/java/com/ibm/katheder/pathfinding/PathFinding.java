@@ -8,7 +8,6 @@ import java.util.Map;
 import com.ibm.katheder.map.GeoMap;
 import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.TerrainType;
-import com.ibm.katheder.map.generation.StaticTerrainTypes;
 
 public class PathFinding {
 
