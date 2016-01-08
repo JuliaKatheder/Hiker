@@ -46,6 +46,7 @@ import com.ibm.katheder.map.MapPosition;
 import com.ibm.katheder.map.TerrainType;
 import com.ibm.katheder.map.error.InvalidMapPositionException;
 import com.ibm.katheder.map.generation.RandomMapGenerator;
+import com.ibm.katheder.pathfinding.NoValidPathException;
 import com.ibm.katheder.view.action.ChangeColorSchemeAction;
 import com.ibm.katheder.view.action.RandomMapAction;
 import com.ibm.katheder.view.color.ColorScheme;
@@ -145,10 +146,9 @@ public class MapVisualization extends JComponent implements MouseListener {
 		g.fillOval(hiker.getPosX() * unit, hiker.getPosY() * unit, unit, unit);
 		g.fillRect(hiker.getDestX() * unit, hiker.getDestY() * unit, unit, unit);
 
-		final List<MapPosition> route = hiker.findPath();
-
+		List<MapPosition> route = hiker.getRoute();
+		
 		for (MapPosition pathPoint : route) {
-			System.out.println(pathPoint.toString());
 			g.fillRect(pathPoint.getX() * unit + unit / 4, pathPoint.getY()
 					* unit + unit / 4, unit / 2, unit / 2);
 		}
@@ -186,20 +186,24 @@ public class MapVisualization extends JComponent implements MouseListener {
 	 * On the click event the destination of the hiker can be changed.
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent event) {
 		final MapVisualization vis = this;
-		final int positionX = e.getX() / unit;
-		final int positionY = e.getY() / unit;
+		final int positionX = event.getX() / unit;
+		final int positionY = event.getY() / unit;
 
 		if (isAlreadyOneClick) {
 			isAlreadyOneClick = false;
 			try {
 				hiker.setPosition(new MapPosition(positionY, positionX));
 				repaint();
-			} catch (InvalidMapPositionException e1) {
-				JOptionPane.showMessageDialog(this, e1.getMessage(),
-						e1.getTitle(), JOptionPane.WARNING_MESSAGE);
-				e1.printStackTrace();
+			} catch (InvalidMapPositionException e) {
+				repaint();
+				JOptionPane.showMessageDialog(this, e.getMessage(),
+						e.getTitle(), JOptionPane.WARNING_MESSAGE);
+			} catch (NoValidPathException e) {
+				repaint();
+				JOptionPane.showMessageDialog(this, e.getMessage(),
+						e.getTitle(), JOptionPane.WARNING_MESSAGE);
 			}
 		} else {
 			isAlreadyOneClick = true;
@@ -210,12 +214,16 @@ public class MapVisualization extends JComponent implements MouseListener {
 						try {
 							hiker.setDestination(new MapPosition(positionY,
 									positionX));
+							vis.repaint();
 						} catch (InvalidMapPositionException e) {
+							vis.repaint();
 							JOptionPane.showMessageDialog(vis, e.getMessage(),
 									e.getTitle(), JOptionPane.WARNING_MESSAGE);
-							e.printStackTrace();
+						} catch (NoValidPathException e) {
+							vis.repaint();
+							JOptionPane.showMessageDialog(vis, e.getMessage(),
+									e.getTitle(), JOptionPane.WARNING_MESSAGE);
 						}
-						vis.repaint();
 					}
 					isAlreadyOneClick = false;
 				}

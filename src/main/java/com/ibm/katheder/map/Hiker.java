@@ -18,10 +18,13 @@
  */
 package com.ibm.katheder.map;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.katheder.map.error.InvalidMapPositionException;
+import com.ibm.katheder.pathfinding.NoValidPathException;
 import com.ibm.katheder.pathfinding.PathFinding;
+import com.ibm.katheder.pathfinding.PathFindingData;
 
 /**
  * <p>
@@ -41,6 +44,7 @@ public class Hiker {
 	private int climbingKitCount;
 
 	private PathFinding pathFinding;
+	private List<MapPosition> route;
 
 	public Hiker(PathFinding pathFinding, GeoMap geoMap) {
 		this(pathFinding, geoMap, new MapPosition(0, 0),
@@ -76,12 +80,13 @@ public class Hiker {
 	}
 
 	public void setPosition(MapPosition position)
-			throws InvalidMapPositionException {
-		if (getGeoMap().getFieldType(destination.getY(), destination.getX())
-				.getWeight() == Integer.MAX_VALUE) {
-			throw new InvalidMapPositionException("Blubb blubb noo!");
-		}
+			throws InvalidMapPositionException, NoValidPathException {
+		validatePosition(position);
 		this.position = position;
+		route = null;
+		if(getRoute().isEmpty()) {			
+			throw new NoValidPathException("You will never reach your destination dude!");
+		}
 	}
 
 	public MapPosition getDestination() {
@@ -89,12 +94,13 @@ public class Hiker {
 	}
 
 	public void setDestination(MapPosition destination)
-			throws InvalidMapPositionException {
-		if (getGeoMap().getFieldType(destination.getY(), destination.getX())
-				.getWeight() == Integer.MAX_VALUE) {
-			throw new InvalidMapPositionException("Blubb blubb noo!");
-		}
+			throws InvalidMapPositionException, NoValidPathException {
+		validatePosition(destination);
 		this.destination = destination;
+		route = null;
+		if(getRoute().isEmpty()) {			
+			throw new NoValidPathException("You will never reach your destination dude!");
+		}
 	}
 
 	public int getPosX() {
@@ -113,8 +119,30 @@ public class Hiker {
 		return (int) destination.getY();
 	}
 
-	public List<MapPosition> findPath() {
-		return pathFinding.findPath(this.geoMap, this.position,
-				this.destination, this.climbingKitCount);
+	public List<MapPosition> getRoute() {
+		if(route == null) {
+			route = findPath();
+		}
+		return route;
+	}
+
+	private List<MapPosition> findPath() {
+		final PathFindingData data = new PathFindingData(this.geoMap,
+				this.position, this.destination, this.climbingKitCount);
+		try {
+			return pathFinding.findPath(data);
+		} catch (NoValidPathException e) {
+			System.out
+					.println("WARNING: There is no path to your destination.");
+			return new ArrayList<>();
+		}
+	}
+	
+	private void validatePosition(MapPosition destination) throws InvalidMapPositionException {
+		if (getGeoMap().getFieldType(destination.getY(), destination.getX())
+				.getWeight() == Integer.MAX_VALUE) {
+			throw new InvalidMapPositionException("Blubb blubb noo!");
+		}
+		
 	}
 }
